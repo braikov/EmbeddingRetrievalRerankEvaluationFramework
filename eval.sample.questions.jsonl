@@ -1,0 +1,3 @@
+{"questionId":"q001","groupId":"g1","variantId":"v1","question":"Кога е основана фирмата?","relevantChunkIds":["doc1::0001"],"relevanceGrades":{"doc1::0001":2}}
+{"questionId":"q002","groupId":"g1","variantId":"v2","question":"Коя година е създадена Acme Corp?","relevantChunkIds":["doc1::0001"],"relevanceGrades":{"doc1::0001":2}}
+{"questionId":"q003","groupId":"g2","variantId":"v1","question":"Какво разработва Acme Corp?","relevantChunkIds":["doc1::0002","doc2::0001"],"relevanceGrades":{"doc1::0002":2,"doc2::0001":1}}

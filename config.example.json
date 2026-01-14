@@ -1,0 +1,97 @@
+{
+  "providers": {
+    "ollama": {
+      "baseUrl": "http://localhost:11434"
+    }
+  },
+  "embeddingModels": [
+    { "name": "nomic-embed-text", "provider": "ollama" },
+    {
+      "name": "bge-m3",
+      "provider": "ollama"
+    }
+,
+    {
+      "name": "qwen3-embedding",
+      "provider": "ollama"
+    }
+  ],
+  "rerankers": [
+    {
+      "id": "llm-rerank-1",
+      "type": "llm-json",
+      "provider": "ollama",
+      "model": "llama3.1",
+      "prompt": {
+        "system": "You are a ranking engine. You do not answer questions. You only rank document chunks.",
+        "userTemplate": [
+          "Your task is to rank the following document chunks by relevance to the QUESTION.",
+          "",
+          "RULES:",
+          "- Return ONLY valid JSON.",
+          "- Do NOT explain anything.",
+          "- Do NOT add text outside JSON.",
+          "- Use ONLY the provided chunkIds.",
+          "- Do NOT invent new ids.",
+          "- Do NOT duplicate ids.",
+          "- Rank from most relevant to least relevant.",
+          "",
+          "QUESTION:",
+          "{{question}}",
+          "",
+          "CHUNKS:",
+          "{{chunks}}",
+          "",
+          "OUTPUT FORMAT:",
+          "{ \"rankedChunkIds\": [\"chunkId1\", \"chunkId2\", \"chunkId3\"] }"
+        ]
+      },
+      "maxCandidates": 60,
+      "timeoutMs": 30000,
+      "fallbackToBaselineOnError": true
+    }
+  ],
+  "metrics": {
+    "topKs": [1, 3, 5, 10],
+    "mrrK": 10,
+    "ndcgK": 10,
+    "stabilityK": 5
+  },
+  "experiments": [
+    {
+      "id": "baseline-nomic",
+      "type": "baseline",
+      "candidateSources": [
+        { "embeddingModel": "nomic-embed-text", "fetchK": 10 }
+      ],
+      "finalTopK": 10
+    },
+    {
+      "id": "rerank-nomic-top30",
+      "type": "rerank",
+      "candidateSources": [
+        { "embeddingModel": "nomic-embed-text", "fetchK": 30 }
+      ],
+      "merge": {
+        "dedupeBy": "chunkId",
+        "aggregateScore": "max"
+      },
+      "rerankerId": "llm-rerank-1",
+      "finalTopK": 10
+    },
+    {
+      "id": "rerank-ensemble-nomic-bge",
+      "type": "rerank",
+      "candidateSources": [
+        { "embeddingModel": "nomic-embed-text", "fetchK": 30 },
+        { "embeddingModel": "bge-m3", "fetchK": 30 }
+      ],
+      "merge": {
+        "dedupeBy": "chunkId",
+        "aggregateScore": "max"
+      },
+      "rerankerId": "llm-rerank-1",
+      "finalTopK": 10
+    }
+  ]
+}

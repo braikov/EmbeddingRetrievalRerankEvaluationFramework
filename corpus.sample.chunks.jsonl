@@ -1,0 +1,3 @@
+{"chunkId":"doc1::0001","sourceId":"doc1","text":"Acme Corp was founded in 1999 by Jane Doe in Sofia."}
+{"chunkId":"doc1::0002","sourceId":"doc1","text":"Acme Corp builds retrieval evaluation tools for enterprise RAG systems."}
+{"chunkId":"doc2::0001","sourceId":"doc2","text":"The flagship product focuses on measuring recall, MRR, nDCG, and stability across experiments."}
